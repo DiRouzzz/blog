@@ -23,6 +23,6 @@ export const Header = styled(HeaderContainer)`
   width: 1200px;
   height: 120px;
   padding: 20px 40px;
-  box-shadow: 0px 3px 15px #242424;
+  box-shadow: rgb(0, 0, 0) 0px 2px 17px;
   background-color: white;
 `;

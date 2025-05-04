@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { Header } from './components';
+import { Header, Footer } from './components';
 
 const Content = styled.div`
   padding: 120px 0;
@@ -15,18 +15,7 @@ const AppColumn = styled.div`
   min-height: 100%;
   margin: 0 auto;
   background-color: white;
-  height: 2000px;
 `;
-
-// const Head = styled.div`
-//   height: 120px;
-//   max-width: 1280px;
-//   margin-inline: auto;
-//   background-color: white;
-//   border: solid;
-// `;
-
-const Footer = () => <div>Footer</div>;
 
 function App() {
   return (
