@@ -1,16 +1,51 @@
-import styled from 'styled-components';
-import { Airplay } from 'lucide-react';
+import { Route, Routes } from 'react-router-dom';
 
-const Div = styled.div`
-  text-align: center;
+import styled from 'styled-components';
+import { Header } from './components';
+
+const Content = styled.div`
+  padding: 120px 0;
 `;
+
+const AppColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 1200px;
+  min-height: 100%;
+  margin: 0 auto;
+  background-color: white;
+  height: 2000px;
+`;
+
+// const Head = styled.div`
+//   height: 120px;
+//   max-width: 1280px;
+//   margin-inline: auto;
+//   background-color: white;
+//   border: solid;
+// `;
+
+const Footer = () => <div>Footer</div>;
 
 function App() {
   return (
-    <Div>
-      <Airplay />
-      123
-    </Div>
+    <AppColumn>
+      <Header />
+      <Content>
+        <h1>Content</h1>
+        <Routes>
+          <Route path="/" element={<div>Главная</div>} />
+          <Route path="/login" element={<div>Авторизация</div>} />
+          <Route path="/register" element={<div>Регистрация</div>} />
+          <Route path="/users" element={<div>Пользователи</div>} />
+          <Route path="/post" element={<div>Новая статья</div>} />
+          <Route path="/post/:postId" element={<div>Статья</div>} />
+          <Route path="*" element={<div>404</div>} />
+        </Routes>
+      </Content>
+      <Footer />
+    </AppColumn>
   );
 }
 

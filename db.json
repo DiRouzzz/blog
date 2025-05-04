@@ -1,0 +1,39 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "login": "vasya777",
+      "password": "12345",
+      "registed_at": "2021-09-22",
+      "role_id": "0"
+    }
+  ],
+  "roles": [
+    {
+      "id": "0",
+      "name": "admin"
+    },
+    {
+      "id": "1",
+      "name": "moderator"
+    },
+    {
+      "id": "2",
+      "name": "reader"
+    },
+    {
+      "id": "3",
+      "name": "guest"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "title": "Просто тестовый текст",
+      "image_url": "https://fastly.picsum.photos/id/142/280/150.jpg?hmac=WYVIitWBmgT9ddm22J1wEGqC5TgT7I82BIFIpWUMFfs",
+      "content": "Контент тест",
+      "published_at": "2024-06-01"
+    }
+  ],
+  "comments": []
+}
