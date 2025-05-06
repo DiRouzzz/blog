@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { pluralize } from 'numeralize-ru';
 
 const FooterContainer = ({ className }) => {
   const [weatherInfo, setWeatherInfo] = useState({});
@@ -33,7 +34,9 @@ const FooterContainer = ({ className }) => {
           })}
         </div>
         <div>
-          {weatherInfo.temperature} градусов, {weatherInfo.weather}
+          {weatherInfo.temperature}{' '}
+          {pluralize(weatherInfo.temperature, 'градус', 'градуса', 'градусов')},{' '}
+          {weatherInfo.weather}
         </div>
       </div>
     </div>

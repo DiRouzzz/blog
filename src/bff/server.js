@@ -1,10 +1,13 @@
 import { addUser } from './add-user';
-import { createSession } from './create-session';
 import { getUser } from './get-user';
+import { sessions } from './sessions';
 
 export const server = {
+  async logout(session) {
+    sessions.remove(session);
+  },
   async autorize(authLogin, authPassword) {
-    const user = getUser(authLogin);
+    const user = await getUser(authLogin);
 
     if (!user) {
       return {
@@ -13,7 +16,7 @@ export const server = {
       };
     }
 
-    if (authPassword !== userFind.password) {
+    if (authPassword !== user.password) {
       return {
         error: 'Неверный пароль',
         response: null,
@@ -22,7 +25,12 @@ export const server = {
 
     return {
       error: null,
-      response: createSession(user.role_id),
+      response: {
+        session: sessions.create(user),
+        id: user.id,
+        login: user.login,
+        roleId: user.role_id,
+      },
     };
   },
 
@@ -40,7 +48,12 @@ export const server = {
 
     return {
       error: null,
-      response: createSession(user.role_id),
+      response: {
+        session: sessions.create(user),
+        id: user.id,
+        login: user.login,
+        roleId: user.role_id,
+      },
     };
   },
 };
