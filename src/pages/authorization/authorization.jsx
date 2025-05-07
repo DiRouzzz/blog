@@ -3,40 +3,22 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { server } from '../../bff';
 import { useState } from 'react';
-import { Input, Button, H2 } from '../../components';
+import { Input, Button, H2, AuthFormError } from '../../components';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../actions';
 
 const authFormSchema = yup.object().shape({
-  login: yup
-    .string()
-    .required('Заполните логин.')
-    .matches(/^\w+$/, 'Неверный логин. Допускаются только буквы и цифры')
-    .min(3, 'Неверно заполнен логин. Нужно указать минимум 3 символа')
-    .max(15, 'Неверно заполнен  логин. Можно указать максимум 15 символов'),
-  password: yup
-    .string()
-    .required('Заполните пароль.')
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      'Неверно заполнен пароль. Пароль должен содержать минимум 8 символов, хотя бы одну букву и одну цифру'
-    ),
+  login: yup.string().required('Заполните логин.'),
+
+  password: yup.string().required('Заполните пароль.'),
 });
 
 const StyledLink = styled(Link)`
   text-align: center;
   text-decoration: underline;
   margin: 20px 0;
-  font-size: 18px;
-`;
-
-const ErrorMessage = styled.div`
-  background-color: #c07777;
-  border-radius: 5px;
-  margin: 10px 0;
-  padding: 10px;
   font-size: 18px;
 `;
 
@@ -66,9 +48,9 @@ const AuthorizationContainer = ({ className }) => {
       }
 
       dispatch(setUser(response));
+      reset();
+      navigate('/');
     });
-    reset();
-    navigate('/');
   };
 
   const formError =
@@ -93,8 +75,10 @@ const AuthorizationContainer = ({ className }) => {
           {...register('password', { onChange: () => setServerError('') })}
         />
 
-        <Button type="submit">Авторизоваться</Button>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        <Button type="submit" disabled={!!errorMessage}>
+          Авторизоваться
+        </Button>
+        {errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
         <StyledLink to="/register">Регистрация</StyledLink>
       </form>
     </div>

@@ -1,5 +1,5 @@
-export const addUser = (login, password) =>
-  fetch('http://localhost:3000/users', {
+export const addUser = async (login, password) => {
+  const response = await fetch('http://localhost:3000/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -11,3 +11,11 @@ export const addUser = (login, password) =>
       role_id: '2',
     }),
   });
+
+  if (!response.ok) {
+    const errorText = await response.text(); // если сервер отдает текст ошибки
+    throw new Error(`Ошибка регистрации: ${response.status} - ${errorText}`);
+  }
+
+  return await response.json();
+};

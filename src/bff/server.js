@@ -16,7 +16,7 @@ export const server = {
       };
     }
 
-    if (authPassword !== user.password) {
+    if (user && authPassword !== user.password) {
       return {
         error: 'Неверный пароль',
         response: null,
@@ -35,25 +35,31 @@ export const server = {
   },
 
   async register(regLogin, regPassword) {
-    const user = getUser(authLogin);
-
-    if (user) {
+    const userCheck = await getUser(regLogin);
+    if (userCheck) {
       return {
         error: 'Такой логин уже занят',
         response: null,
       };
     }
 
-    await addUser(regLogin, regPassword);
+    try {
+      const user = await addUser(regLogin, regPassword);
 
-    return {
-      error: null,
-      response: {
-        session: sessions.create(user),
-        id: user.id,
-        login: user.login,
-        roleId: user.role_id,
-      },
-    };
+      return {
+        error: null,
+        response: {
+          session: sessions.create(user),
+          id: user.id,
+          login: user.login,
+          roleId: user.role_id,
+        },
+      };
+    } catch (e) {
+      return {
+        error: e.message || 'Неизвестная ошибка при регистрации',
+        response: null,
+      };
+    }
   },
 };
