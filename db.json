@@ -13,6 +13,13 @@
       "password": "qwerty123",
       "registed_at": "2025-05-07 15:29",
       "role_id": "2"
+    },
+    {
+      "id": "5841",
+      "login": "vasyan555",
+      "password": "qwerty12345",
+      "registed_at": "2025-05-09 17:22",
+      "role_id": "2"
     }
   ],
   "roles": [

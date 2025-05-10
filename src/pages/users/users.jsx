@@ -1,9 +1,9 @@
 import { Save, Trash2 } from 'lucide-react';
-import { H2 } from '../../components';
+import { Content, H2 } from '../../components';
 import styled from 'styled-components';
+import { useServerRequest } from '../../hooks';
 import { useState, useEffect } from 'react';
-import { getUsers } from '../../bff/get-users';
-import { getRoles } from '../../bff/get-roles';
+import { getUsers, getRoles } from '../../bff/api';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -16,7 +16,6 @@ const Th = styled.th`
   padding-bottom: 12px;
   background-color: #4caf50;
   color: white;
-
   padding: 8px;
 `;
 
@@ -90,72 +89,77 @@ const Loader = styled.span`
 const UsersContainer = ({ className }) => {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const requestServer = useServerRequest();
 
   useEffect(() => {
-    const fetch = async () => {
-      const users = await getUsers();
-      const roles = await getRoles();
-      setUsers(users);
-      setRoles(roles);
-    };
-    fetch();
-  }, []);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [usersRes, rolesRes] = await Promise.all([
+          requestServer('fetchUsers'),
+          requestServer('fetchRoles'),
+        ]);
 
-  const onClickSave = (id) => {
-    console.log(id);
-  };
-
-  const onClickRemove = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3000/users/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при удалении задачи');
+        if (usersRes.error || rolesRes.error) {
+          setErrorMessage(usersRes.error || rolesRes.error);
+        } else {
+          setUsers(usersRes.response);
+          setRoles(rolesRes.response);
+        }
+      } catch (err) {
+        setErrorMessage('Произошла ошибка при загрузке данных');
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      console.log('Пользователь успешно удалена!');
-      setUsers(users.filter((user) => user.id !== id));
-      // dispatch(removeTodo({ id }));
-    } catch (error) {
-      console.error('Ошибка при удалении пользователя:', error);
-      throw error;
-    }
-  };
+    fetchData();
+  }, [requestServer]);
+
   return (
     <div className={className}>
-      <H2>Пользователи</H2>
-      <Table>
-        <thead>
-          <tr>
-            <Th>Логин</Th>
-            <Th>Дата регистрации</Th>
-            <Th>Роль</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(({ id: userId, login, registed_at, role_id }) => (
-            <Tr key={userId}>
-              <Td>{login}</Td>
-              <Td>{registed_at}</Td>
-              <Td>
-                <StyledDiv>
-                  <Dropdown defaultValue={role_id}>
-                    {roles.map(({ id: roleId, name }) => (
-                      <Option key={roleId} value={roleId}>
-                        {name}
-                      </Option>
-                    ))}
-                  </Dropdown>
-                  <Save size={32} onClick={() => onClickSave(userId)} />
-                  <Trash2 size={32} onClick={() => onClickRemove(userId)} />
-                </StyledDiv>
-              </Td>
-            </Tr>
-          ))}
-        </tbody>
-      </Table>
+      <Content error={errorMessage}>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <H2>Пользователи</H2>
+            <Table>
+              <thead>
+                <tr>
+                  <Th>Логин</Th>
+                  <Th>Дата регистрации</Th>
+                  <Th>Роль</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(({ id: userId, login, registeredAt, roleId }) => (
+                  <Tr key={userId}>
+                    <Td>{login}</Td>
+                    <Td>{registeredAt}</Td>
+                    <Td>
+                      <StyledDiv>
+                        <Dropdown defaultValue={roleId}>
+                          {roles.map(({ id: idRole, name }) => (
+                            <Option key={idRole} value={roleId}>
+                              {name}
+                            </Option>
+                          ))}
+                        </Dropdown>
+                        <Save size={32} />
+                        <Trash2 size={32} />
+                      </StyledDiv>
+                    </Td>
+                  </Tr>
+                ))}
+              </tbody>
+            </Table>
+          </>
+        )}
+      </Content>
     </div>
   );
 };
