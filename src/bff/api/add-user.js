@@ -13,7 +13,7 @@ export const addUser = async (login, password) => {
   });
 
   if (!response.ok) {
-    const errorText = await response.text(); // если сервер отдает текст ошибки
+    const errorText = await response.text();
     throw new Error(`Ошибка регистрации: ${response.status} - ${errorText}`);
   }
 

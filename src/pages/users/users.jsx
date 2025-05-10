@@ -3,7 +3,7 @@ import { Content, H2 } from '../../components';
 import styled from 'styled-components';
 import { useServerRequest } from '../../hooks';
 import { useState, useEffect } from 'react';
-import { getUsers, getRoles } from '../../bff/api';
+import { ROLE } from '../../constants';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -91,6 +91,8 @@ const UsersContainer = ({ className }) => {
   const [roles, setRoles] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState({});
+  const [saveStatus, setSaveStatus] = useState({});
 
   const requestServer = useServerRequest();
 
@@ -108,6 +110,12 @@ const UsersContainer = ({ className }) => {
         } else {
           setUsers(usersRes.response);
           setRoles(rolesRes.response);
+
+          const initialSelectedRoles = {};
+          usersRes.response.forEach((user) => {
+            initialSelectedRoles[user.id] = user.roleId;
+          });
+          setSelectedRoles(initialSelectedRoles);
         }
       } catch (err) {
         setErrorMessage('Произошла ошибка при загрузке данных');
@@ -118,6 +126,31 @@ const UsersContainer = ({ className }) => {
 
     fetchData();
   }, [requestServer]);
+
+  const onRoleChange = (userId, newRoleId) => {
+    setSelectedRoles((prev) => ({
+      ...prev,
+      [userId]: newRoleId,
+    }));
+  };
+
+  const onRoleSave = async (userId, roleId) => {
+    await requestServer('updateUserRole', userId, roleId);
+
+    setUsers((prev) =>
+      prev.map((user) => (user.id === userId ? { ...user, roleId } : user))
+    );
+
+    setSelectedRoles((prev) => ({
+      ...prev,
+      [userId]: roleId,
+    }));
+
+    setSaveStatus((prev) => ({ ...prev, [userId]: true }));
+    setTimeout(() => {
+      setSaveStatus((prev) => ({ ...prev, [userId]: false }));
+    }, 2000);
+  };
 
   return (
     <div className={className}>
@@ -136,25 +169,54 @@ const UsersContainer = ({ className }) => {
                 </tr>
               </thead>
               <tbody>
-                {users.map(({ id: userId, login, registeredAt, roleId }) => (
-                  <Tr key={userId}>
-                    <Td>{login}</Td>
-                    <Td>{registeredAt}</Td>
-                    <Td>
-                      <StyledDiv>
-                        <Dropdown defaultValue={roleId}>
-                          {roles.map(({ id: idRole, name }) => (
-                            <Option key={idRole} value={roleId}>
-                              {name}
-                            </Option>
-                          ))}
-                        </Dropdown>
-                        <Save size={32} />
-                        <Trash2 size={32} />
-                      </StyledDiv>
-                    </Td>
-                  </Tr>
-                ))}
+                {users.map(({ id: userId, login, registeredAt, roleId }) => {
+                  const currentSelectedRole = selectedRoles[userId] || roleId;
+                  const isUnchanged = currentSelectedRole === roleId;
+
+                  return (
+                    <Tr key={userId}>
+                      <Td>{login}</Td>
+                      <Td>{registeredAt}</Td>
+                      <Td>
+                        <StyledDiv>
+                          <Dropdown
+                            value={currentSelectedRole}
+                            onChange={(e) =>
+                              onRoleChange(userId, e.target.value)
+                            }
+                          >
+                            {roles
+                              .filter(({ id }) => id !== ROLE.GUEST)
+                              .map(({ id: idRole, name }) => (
+                                <Option key={idRole} value={idRole}>
+                                  {name}
+                                </Option>
+                              ))}
+                          </Dropdown>
+                          {saveStatus[userId] ? (
+                            <span style={{ fontSize: 24, color: 'green' }}>
+                              ✅
+                            </span>
+                          ) : (
+                            <Save
+                              size={32}
+                              onClick={() =>
+                                !isUnchanged &&
+                                onRoleSave(userId, currentSelectedRole)
+                              }
+                              style={{
+                                opacity: isUnchanged ? 0.33 : 1,
+                                pointerEvents: isUnchanged ? 'none' : 'auto',
+                              }}
+                            />
+                          )}
+
+                          <Trash2 size={32} />
+                        </StyledDiv>
+                      </Td>
+                    </Tr>
+                  );
+                })}
               </tbody>
             </Table>
           </>
