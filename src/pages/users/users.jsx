@@ -93,6 +93,7 @@ const UsersContainer = ({ className }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState({});
   const [saveStatus, setSaveStatus] = useState({});
+  const [shouldUpdateUserList, setShouldUpdateUserList] = useState(false);
 
   const requestServer = useServerRequest();
 
@@ -125,7 +126,7 @@ const UsersContainer = ({ className }) => {
     };
 
     fetchData();
-  }, [requestServer]);
+  }, [requestServer, shouldUpdateUserList]);
 
   const onRoleChange = (userId, newRoleId) => {
     setSelectedRoles((prev) => ({
@@ -150,6 +151,11 @@ const UsersContainer = ({ className }) => {
     setTimeout(() => {
       setSaveStatus((prev) => ({ ...prev, [userId]: false }));
     }, 2000);
+  };
+
+  const onUserRemove = async (userId) => {
+    await requestServer('removeUser', userId);
+    setShouldUpdateUserList(!shouldUpdateUserList);
   };
 
   return (
@@ -211,7 +217,10 @@ const UsersContainer = ({ className }) => {
                             />
                           )}
 
-                          <Trash2 size={32} />
+                          <Trash2
+                            size={32}
+                            onClick={() => onUserRemove(userId)}
+                          />
                         </StyledDiv>
                       </Td>
                     </Tr>
