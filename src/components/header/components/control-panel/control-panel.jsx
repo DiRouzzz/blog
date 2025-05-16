@@ -37,6 +37,11 @@ const ControlPanelContainer = ({ className }) => {
   const navigate = useNavigate();
   const { roleId, login, session } = useSelector((state) => state.user);
 
+  const onLogout = () => {
+    dispatch(logout(session));
+    sessionStorage.removeItem('userData');
+  };
+
   return (
     <div className={className}>
       <RightAligned>
@@ -47,10 +52,7 @@ const ControlPanelContainer = ({ className }) => {
         ) : (
           <Logout>
             <div>{login}</div>
-            <ArrowBigRight
-              size={30}
-              onClick={() => dispatch(logout(session))}
-            />
+            <ArrowBigRight size={30} onClick={onLogout} />
           </Logout>
         )}
       </RightAligned>

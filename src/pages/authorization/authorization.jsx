@@ -48,6 +48,7 @@ const AuthorizationContainer = ({ className }) => {
       }
 
       dispatch(setUser(response));
+      sessionStorage.setItem('userData', JSON.stringify(response));
       reset();
       navigate('/');
     });

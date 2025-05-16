@@ -38,9 +38,48 @@
       "id": "1",
       "title": "Просто тестовый текст",
       "image_url": "https://fastly.picsum.photos/id/142/280/150.jpg?hmac=WYVIitWBmgT9ddm22J1wEGqC5TgT7I82BIFIpWUMFfs",
-      "content": "Контент тест",
+      "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam aut ea ipsam labore, aliquam totam accusamus suscipit vero rem! Ipsum, obcaecati odio corporis eligendi officiis unde? Autem modi, voluptate suscipit molestiae totam aliquid consequuntur inventore, impedit facilis molestias reprehenderit harum temporibus saepe reiciendis quos! Deserunt dicta dolore rerum quos minima, a cupiditate esse amet necessitatibus rem iste quae ipsam tenetur asperiores dolores, eveniet aliquam exercitationem et recusandae cumque nesciunt similique? Aspernatur, ea. Quidem a cum cupiditate vel voluptate, autem nisi veniam deserunt dolor facere distinctio repudiandae molestias corrupti amet debitis. Itaque blanditiis, fuga tenetur, animi labore veritatis mollitia ad, asperiores eius molestias dolor eveniet. Vitae, saepe fugit? Exercitationem consequatur consectetur quo nihil odit impedit voluptas praesentium molestiae veritatis, sequi quaerat esse, fugit alias eum labore aperiam eveniet quas eos commodi necessitatibus porro repudiandae aliquam numquam! Quis velit veniam sequi impedit ducimus earum hic delectus quae, perferendis dolor non, sint suscipit doloremque cupiditate optio debitis deleniti. Delectus aliquam labore cupiditate totam expedita iusto illum unde fuga, consequatur, nulla esse voluptas commodi impedit asperiores dolorum laudantium provident accusamus autem ea possimus. Facilis quas suscipit mollitia assumenda id quaerat, soluta officia? Sunt aperiam modi amet eveniet animi aspernatur corporis voluptate ducimus inventore vel.",
       "published_at": "2024-06-01"
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "id": "4a62",
+      "author_id": "1",
+      "post_id": "1",
+      "published_at": "2025-05-16 09:30",
+      "content": "Привет\n"
+    },
+    {
+      "id": "d01d",
+      "author_id": "1",
+      "post_id": "1",
+      "published_at": "2025-05-16 09:44",
+      "content": "gfdfdgfdg"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ef12",
+      "hash": "0.25945977956920174278820923063904047012329101562500",
+      "user": {
+        "id": "1",
+        "login": "vasya777",
+        "password": "qwerty12345",
+        "registeredAt": "2021-09-22",
+        "roleId": "0"
+      }
+    },
+    {
+      "id": "c187",
+      "hash": "0.96469816327537682987269818113418295979499816894531",
+      "user": {
+        "id": "1",
+        "login": "vasya777",
+        "password": "qwerty12345",
+        "registeredAt": "2021-09-22",
+        "roleId": "0"
+      }
+    }
+  ]
 }
