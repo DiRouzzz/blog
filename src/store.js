@@ -5,9 +5,11 @@ import {
   usersReducer,
   postReducer,
   postsReducer,
+  appReducer,
 } from './reducers';
 
 const reducer = combineReducers({
+  app: appReducer,
   user: userReducer,
   users: usersReducer,
   post: postReducer,

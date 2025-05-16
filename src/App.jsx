@@ -1,11 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import { Authorization, Post, Registration, Users } from './pages';
-
-import styled from 'styled-components';
-import { Header, Footer } from './components';
+import { Header, Footer, Modal } from './components';
 import { useDispatch } from 'react-redux';
 import { useLayoutEffect } from 'react';
 import { setUser } from './actions';
+import styled from 'styled-components';
 
 const Content = styled.div`
   padding: 120px 0;
@@ -50,6 +49,7 @@ function App() {
         </Routes>
       </Content>
       <Footer />
+      <Modal />
     </AppColumn>
   );
 }

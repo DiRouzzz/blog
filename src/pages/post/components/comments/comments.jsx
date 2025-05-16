@@ -24,6 +24,7 @@ const CommentsContainer = ({ className, comments, postId }) => {
           name="comment"
           value={newComment}
           placeholder="Комментарий..."
+          maxLength={100}
           onChange={({ target }) => setNewComment(target.value)}
         ></textarea>
         <Send
@@ -36,6 +37,7 @@ const CommentsContainer = ({ className, comments, postId }) => {
           <Comment
             key={id}
             id={id}
+            postId={postId}
             author={author}
             content={content}
             publishedAt={publishedAt}

@@ -1,7 +1,37 @@
 import { CircleUserRound, Trash2, Calendar } from 'lucide-react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import {
+  removeCommentAsync,
+  openModal,
+  CLOSE_MODAL,
+} from '../../../../../../actions';
+import { useServerRequest } from '../../../../../../hooks';
 
-const CommentContainer = ({ className, id, author, content, publishedAt }) => {
+const CommentContainer = ({
+  className,
+  id,
+  author,
+  content,
+  publishedAt,
+  postId,
+}) => {
+  const dispatch = useDispatch();
+  const requestServer = useServerRequest();
+
+  const onCommentRemove = (id) => {
+    dispatch(
+      openModal({
+        text: 'Удалить комментарий?',
+        onConfirm: () => {
+          dispatch(removeCommentAsync(requestServer, id, postId));
+          dispatch(CLOSE_MODAL);
+        },
+        onCancel: () => dispatch(CLOSE_MODAL),
+      })
+    );
+  };
+
   return (
     <div className={className}>
       <div className="content">
@@ -17,7 +47,7 @@ const CommentContainer = ({ className, id, author, content, publishedAt }) => {
         </div>
         <div className="text-content">{content}</div>
       </div>
-      <Trash2 />
+      <Trash2 onClick={() => onCommentRemove(id)} />
     </div>
   );
 };

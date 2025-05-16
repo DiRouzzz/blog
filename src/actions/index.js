@@ -4,3 +4,6 @@ export * from './logout.js';
 export * from './load-post-async.js';
 export * from './set-post-data.js';
 export * from './add-comment-async.js';
+export * from './remove-comment-async.js';
+export * from './open-modal.js';
+export * from './close-modal.js';

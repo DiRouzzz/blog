@@ -6,13 +6,6 @@
       "password": "qwerty12345",
       "registed_at": "2021-09-22",
       "role_id": "0"
-    },
-    {
-      "id": "45ea",
-      "login": "drose",
-      "password": "qwerty123",
-      "registed_at": "2025-05-07 15:29",
-      "role_id": "0"
     }
   ],
   "roles": [
@@ -44,18 +37,11 @@
   ],
   "comments": [
     {
-      "id": "4a62",
+      "id": "bafb",
       "author_id": "1",
       "post_id": "1",
-      "published_at": "2025-05-16 09:30",
-      "content": "Привет\n"
-    },
-    {
-      "id": "d01d",
-      "author_id": "1",
-      "post_id": "1",
-      "published_at": "2025-05-16 09:44",
-      "content": "gfdfdgfdg"
+      "published_at": "2025-05-16 12:54",
+      "content": "gsgdsg"
     }
   ],
   "sessions": [
