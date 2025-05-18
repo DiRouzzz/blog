@@ -11,11 +11,11 @@ export const getPost = async (postId) => {
     }
 
     const post = await response.json();
-    if (!post) return null;
+  
 
-    const transform = transformPost(post);
+    return transformPost(post);
 
-    return transform;
+    
   } catch (error) {
     console.error('Ошибка при получении поста:', error);
     throw error;

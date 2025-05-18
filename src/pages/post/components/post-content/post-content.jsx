@@ -20,6 +20,7 @@ const PostContentContainer = ({
       <H2>{title}</H2>
       <div className="content">
         <SpecialPanel
+          id={id}
           publishedAt={publishedAt}
           editButton={
             <SquarePen onClick={() => navigate(`/post/${id}/edit`)} />

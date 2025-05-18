@@ -2,11 +2,15 @@ import styled from 'styled-components';
 import { Input } from '../../../../components';
 import { Save } from 'lucide-react';
 import { SpecialPanel } from '../special-panel/special-panel';
-import { useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { sanitizeContent } from './utils';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loadPostAsync, savePostAsync } from '../../../../actions';
+import {
+  loadPostAsync,
+  RESET_POST_DATA,
+  savePostAsync,
+} from '../../../../actions';
 import { useServerRequest } from '../../../../hooks';
 
 const PostFormContainer = ({
@@ -17,9 +21,14 @@ const PostFormContainer = ({
   content,
   publishedAt,
 }) => {
-  const imageRef = useRef(null);
-  const titleRef = useRef(null);
+  const [imageUrlValue, setImageUrlValue] = useState(imageUrl);
+  const [titleValue, setTitleValue] = useState(imageUrl);
   const contentRef = useRef(null);
+
+  useLayoutEffect(() => {
+    setImageUrlValue(imageUrl);
+    setTitleValue(title);
+  }, [imageUrl, title]);
 
   const dispatch = useDispatch();
 
@@ -27,35 +36,36 @@ const PostFormContainer = ({
 
   const requestServer = useServerRequest();
 
-  const onSave = async () => {
-    const newImageUrl = imageRef.current.value;
-    const newTitle = titleRef.current.value;
+  const onSave = () => {
     const newContent = sanitizeContent(contentRef.current.innerHTML);
 
-    await dispatch(
+    dispatch(
       savePostAsync(requestServer, {
         id,
-        imageUrl: newImageUrl,
-        title: newTitle,
+        imageUrl: imageUrlValue,
+        title: titleValue,
         content: newContent,
       })
-    );
-
-    await dispatch(loadPostAsync(requestServer, id));
-
-    navigate(`/post/${id}`);
+    ).then(({ id }) => {
+      navigate(`/post/${id}`);
+    });
   };
 
   return (
     <div className={className}>
       <Input
-        ref={imageRef}
+        onChange={({ target }) => setImageUrlValue(target.value)}
         defaultValue={imageUrl}
         placeholder="Изображение..."
       />
-      <Input ref={titleRef} defaultValue={title} placeholder="Заголовок..." />
+      <Input
+        onChange={({ target }) => setTitleValue(target.value)}
+        defaultValue={title}
+        placeholder="Заголовок..."
+      />
       <div className="content">
         <SpecialPanel
+          id={id}
           publishedAt={publishedAt}
           margin="20px 0"
           editButton={<Save onClick={onSave} />}
@@ -81,6 +91,9 @@ export const PostForm = styled(PostFormContainer)`
     p {
       text-align: left;
       letter-spacing: 1px;
+      min-height: 80px;
+      border: 1px solid #000;
+      border-radius: 3px;
     }
   }
 

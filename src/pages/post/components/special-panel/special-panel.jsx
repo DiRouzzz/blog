@@ -1,16 +1,42 @@
 import { Calendar, Trash2 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { openModal, CLOSE_MODAL, removePostAsync } from '../../../../actions';
+import { useServerRequest } from '../../../../hooks';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-const SpecialPanelContainer = ({ className, publishedAt, editButton }) => {
+const SpecialPanelContainer = ({ className, publishedAt, editButton, id }) => {
+  const dispatch = useDispatch();
+  const requestServer = useServerRequest();
+  const navigate = useNavigate();
+
+  const onPostRemove = async () => {
+    dispatch(
+      openModal({
+        text: 'Удалить статью?',
+        onConfirm: async () => {
+          await dispatch(removePostAsync(requestServer, id));
+          await dispatch(CLOSE_MODAL);
+          navigate('/');
+        },
+        onCancel: () => dispatch(CLOSE_MODAL),
+      })
+    );
+  };
+
   return (
     <div className={className}>
       <div className="published-at">
-        <Calendar />
-        {publishedAt}
+        {publishedAt && (
+          <>
+            <Calendar />
+            {publishedAt}
+          </>
+        )}
       </div>
       <div className="icons">
         {editButton}
-        <Trash2 />
+        {publishedAt && <Trash2 onClick={onPostRemove} />}
       </div>
     </div>
   );

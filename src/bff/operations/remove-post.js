@@ -1,8 +1,8 @@
-import { updatePost, addPost } from '../api';
+import { deleteComment, deletePost, getComments } from '../api';
 import { ROLE } from '../constants';
 import { sessions } from '../sessions';
 
-export const savePost = async (hash, newPostData) => {
+export const removePost = async (hash, id) => {
   const accessRoles = [ROLE.ADMIN];
 
   const access = await sessions.access(hash, accessRoles);
@@ -14,13 +14,14 @@ export const savePost = async (hash, newPostData) => {
     };
   }
 
-  const savedPost =
-    newPostData.id === ''
-      ? await addPost(newPostData)
-      : await updatePost(newPostData);
+  await deletePost(id);
+
+  const comments = await getComments(id);
+
+  await Promise.all(comments.map(({ id: commentId }) => deleteComment(commentId)));
 
   return {
     error: null,
-    response: savedPost,
+    response: true,
   };
 };
