@@ -47,7 +47,9 @@ const CommentContainer = ({
         </div>
         <div className="text-content">{content}</div>
       </div>
-      <Trash2 onClick={() => onCommentRemove(id)} />
+      <div className="trash">
+        <Trash2 onClick={() => onCommentRemove(id)} />
+      </div>
     </div>
   );
 };
@@ -58,15 +60,6 @@ export const Comment = styled(CommentContainer)`
   align-items: center;
   gap: 10px;
   margin-top: 15px;
-
-  svg {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-      transform: scale(1.05);
-      transition: all 0.2s ease;
-    }
-  }
 
   .content {
     max-width: 650px;
@@ -92,6 +85,22 @@ export const Comment = styled(CommentContainer)`
         align-items: center;
         gap: 5px;
         margin-top: -15px;
+      }
+    }
+  }
+
+  .trash {
+    svg {
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+        transition: all 0.2s ease;
+      }
+
+      &:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #3e8e41;
       }
     }
   }

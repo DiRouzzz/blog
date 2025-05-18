@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { H2 } from '../../../../components';
-import { Calendar, SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
+import { SpecialPanel } from '../special-panel/special-panel';
+import { useNavigate } from 'react-router-dom';
 
 const PostContentContainer = ({
   className,
@@ -10,22 +12,20 @@ const PostContentContainer = ({
   content,
   publishedAt,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className={className}>
       {imageUrl && <img src={imageUrl} alt={title} />}
       <H2>{title}</H2>
       <div className="content">
-        <div className="special-panel">
-          <div className="published-at">
-            <Calendar />
-            {publishedAt}
-          </div>
-          <div className="icons">
-            <SquarePen />
-            <Trash2 />
-          </div>
-        </div>
-        <p>{content}</p>
+        <SpecialPanel
+          publishedAt={publishedAt}
+          editButton={
+            <SquarePen onClick={() => navigate(`/post/${id}/edit`)} />
+          }
+        />
+        <p style={{ whiteSpace: 'pre-line' }}>{content}</p>
       </div>
     </div>
   );
@@ -40,25 +40,6 @@ export const PostContent = styled(PostContentContainer)`
   }
 
   .content {
-    .special-panel {
-      display: flex;
-      justify-content: space-between;
-
-      .published-at {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 600;
-        font-size: 18px;
-      }
-
-      .icons {
-        display: flex;
-        gap: 15px;
-        cursor: pointer;
-      }
-    }
-
     p {
       text-align: left;
       letter-spacing: 1px;

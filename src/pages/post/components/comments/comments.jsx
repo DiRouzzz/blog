@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useServerRequest } from '../../../../hooks';
-import { addCommentAsync } from '../../../../actions';
+import { addCommentAsync, loadPostAsync } from '../../../../actions';
 
 const CommentsContainer = ({ className, comments, postId }) => {
   const [newComment, setNewComment] = useState('');
@@ -12,8 +12,9 @@ const CommentsContainer = ({ className, comments, postId }) => {
   const dispatch = useDispatch();
   const requestServer = useServerRequest();
 
-  const onNewCommentAdd = (userId, postId, content) => {
-    dispatch(addCommentAsync(requestServer, userId, postId, content));
+  const onNewCommentAdd = async (userId, postId, content) => {
+    await dispatch(addCommentAsync(requestServer, userId, postId, content));
+    dispatch(loadPostAsync(requestServer, postId));
     setNewComment('');
   };
 
@@ -55,6 +56,20 @@ export const Comments = styled(CommentsContainer)`
     align-items: center;
     gap: 10px;
     margin-top: 40px;
+
+    svg {
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+        transition: all 0.2s ease;
+      }
+
+      &:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #3e8e41;
+      }
+    }
 
     textarea {
       width: 650px;
