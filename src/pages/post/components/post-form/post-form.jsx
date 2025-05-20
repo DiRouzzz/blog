@@ -6,11 +6,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { sanitizeContent } from './utils';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  loadPostAsync,
-  RESET_POST_DATA,
-  savePostAsync,
-} from '../../../../actions';
+import { savePostAsync } from '../../../../actions';
 import { useServerRequest } from '../../../../hooks';
 
 const PostFormContainer = ({
@@ -22,7 +18,7 @@ const PostFormContainer = ({
   publishedAt,
 }) => {
   const [imageUrlValue, setImageUrlValue] = useState(imageUrl);
-  const [titleValue, setTitleValue] = useState(imageUrl);
+  const [titleValue, setTitleValue] = useState(title);
   const contentRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -55,12 +51,14 @@ const PostFormContainer = ({
     <div className={className}>
       <Input
         onChange={({ target }) => setImageUrlValue(target.value)}
-        defaultValue={imageUrl}
+        value={imageUrlValue}
+        type="text"
         placeholder="Изображение..."
       />
       <Input
         onChange={({ target }) => setTitleValue(target.value)}
-        defaultValue={title}
+        value={titleValue}
+        type="text"
         placeholder="Заголовок..."
       />
       <div className="content">

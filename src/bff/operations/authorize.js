@@ -12,7 +12,6 @@ export const autorize = async (authLogin, authPassword) => {
   }
 
   const { id, login, password, roleId } = user;
-  console.log('pass', login);
 
   if (authPassword !== password) {
     return {

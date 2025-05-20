@@ -1,10 +1,14 @@
 import { transformComment } from '../transformers';
 
 export const getComments = async (postId) => {
+  const ALL_COMMENTS_URL = 'http://localhost:3000/comments';
+  const POST_COMMENTS_URL = 'http://localhost:3000/comments?post_id=';
+
+  const url =
+    postId === undefined ? ALL_COMMENTS_URL : POST_COMMENTS_URL + postId;
+
   try {
-    const response = await fetch(
-      `http://localhost:3000/comments?post_id=${postId}`
-    );
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(

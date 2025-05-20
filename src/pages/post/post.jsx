@@ -26,8 +26,6 @@ const PostContainer = ({ className }) => {
     dispatch(loadPostAsync(requestServer, params.id));
   }, [requestServer, dispatch, params.id, isCreating]);
 
-  console.log('post', post);
-
   return (
     <div className={className}>
       {isCreating || isEditing ? (
