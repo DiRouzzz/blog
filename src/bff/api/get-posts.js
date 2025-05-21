@@ -1,13 +1,15 @@
 import { transformPost } from '../transformers';
 
-export const getPosts = async (page, limit) => {
+export const getPosts = async (searchPhrase, page, limit) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/posts?_page=${page}&_limit=${limit}`
+      `http://localhost:3000/posts?title_like=${searchPhrase}&_page=${page}&_limit=${limit}`
     );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(
+        `Ошибка запроса: ${response.status} ${response.statusText}`
+      );
     }
 
     const postsJson = await response.json();
@@ -22,14 +24,3 @@ export const getPosts = async (page, limit) => {
     throw error;
   }
 };
-
-// export const getPosts = (page, limit) =>
-//   fetch(`http://localhost:3000/posts?_page=${page}&_limit=${limit}`).then(
-//     (loadedPosts) =>
-//       Promise.all([loadedPosts.json(), loadedPosts.headers.get('Link')]).then(
-//         ([loadedPosts, links]) => ({
-//           posts: loadedPosts && loadedPosts.map(transformPost),
-//           links,
-//         })
-//       )
-//   );
