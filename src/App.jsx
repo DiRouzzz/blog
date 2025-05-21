@@ -7,7 +7,7 @@ import { setUser } from './actions';
 import styled from 'styled-components';
 
 const Content = styled.div`
-  padding: 120px 0;
+  padding-top: 160px;
 `;
 
 const AppColumn = styled.div`
