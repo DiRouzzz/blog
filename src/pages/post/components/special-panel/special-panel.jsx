@@ -1,14 +1,17 @@
 import { Calendar, Trash2 } from 'lucide-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openModal, CLOSE_MODAL, removePostAsync } from '../../../../actions';
 import { useServerRequest } from '../../../../hooks';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { checkAccess } from '../../../../utils';
+import { ROLE } from '../../../../constants';
 
 const SpecialPanelContainer = ({ className, publishedAt, editButton, id }) => {
   const dispatch = useDispatch();
   const requestServer = useServerRequest();
   const navigate = useNavigate();
+  const roleId = useSelector((state) => state.user.roleId);
 
   const onPostRemove = async () => {
     dispatch(
@@ -24,6 +27,8 @@ const SpecialPanelContainer = ({ className, publishedAt, editButton, id }) => {
     );
   };
 
+  const isAdmin = checkAccess([ROLE.ADMIN], roleId);
+
   return (
     <div className={className}>
       <div className="published-at">
@@ -34,10 +39,12 @@ const SpecialPanelContainer = ({ className, publishedAt, editButton, id }) => {
           </>
         )}
       </div>
-      <div className="icons">
-        {editButton}
-        {publishedAt && <Trash2 onClick={onPostRemove} />}
-      </div>
+      {isAdmin && (
+        <div className="icons">
+          {editButton}
+          {publishedAt && <Trash2 onClick={onPostRemove} />}
+        </div>
+      )}
     </div>
   );
 };

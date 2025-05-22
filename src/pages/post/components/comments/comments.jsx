@@ -5,34 +5,39 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useServerRequest } from '../../../../hooks';
 import { addCommentAsync, loadPostAsync } from '../../../../actions';
+import { ROLE } from '../../../../constants';
 
 const CommentsContainer = ({ className, comments, postId }) => {
   const [newComment, setNewComment] = useState('');
-  const userId = useSelector((state) => state.user.id);
+  const { id, roleId } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const requestServer = useServerRequest();
 
-  const onNewCommentAdd = async (userId, postId, content) => {
-    await dispatch(addCommentAsync(requestServer, userId, postId, content));
-    dispatch(loadPostAsync(requestServer, postId));
+  const onNewCommentAdd = async (id, postId, content) => {
+    await dispatch(addCommentAsync(requestServer, id, postId, content));
+    // dispatch(loadPostAsync(requestServer, postId));
     setNewComment('');
   };
 
+  const isGuest = roleId === ROLE.GUEST;
+
   return (
     <div className={className}>
-      <div className="new-comment">
-        <textarea
-          name="comment"
-          value={newComment}
-          placeholder="Комментарий..."
-          maxLength={100}
-          onChange={({ target }) => setNewComment(target.value)}
-        ></textarea>
-        <Send
-          style={{ cursor: 'pointer' }}
-          onClick={() => onNewCommentAdd(userId, postId, newComment)}
-        />
-      </div>
+      {!isGuest && (
+        <div className="new-comment">
+          <textarea
+            name="comment"
+            value={newComment}
+            placeholder="Комментарий..."
+            maxLength={100}
+            onChange={({ target }) => setNewComment(target.value)}
+          ></textarea>
+          <Send
+            style={{ cursor: 'pointer' }}
+            onClick={() => onNewCommentAdd(id, postId, newComment)}
+          />
+        </div>
+      )}
       <div className="comments">
         {comments.map(({ id, author, content, publishedAt }) => (
           <Comment

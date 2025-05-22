@@ -1,12 +1,51 @@
-# React + Vite
+# Авторский блог
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание:
 
-Currently, two official plugins are available:
+_Авторский блог — это полнофункциональное одностраничное веб-приложение, реализованное на React с поддержкой CRUD-операций, разграничением ролей пользователей, системой комментариев, погодным виджетом и валидируемыми формами._
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Цель:
 
-## Expanding the ESLint configuration
+_Закрепить знания по React, управление состоянием, роунтинг, работа с формами, взаимодействие с API и создание удобного пользовательского интерфейса._
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Функциональность:
+
+### Страницы:
+
+- _Главная страница с поиском и пагинацией статей._
+- _Просмотр, редактирование и удаление статьи (роль: администратор)._
+- _Создание новой статьи (роль: администратор)._
+- _Комментирование (авторизованные пользователи)._
+- _Регистрация и авторизация._
+- _Список пользователей с управлением ролями (роль: администратор)._
+- _Обработка ошибок: 404 и ограничение доступа._
+
+### Роли пользователей:
+
+- _Гость — неавторизованный пользователь._
+- _Читатель — базовая авторизованная роль._
+- _Модератор — может удалять комментарии._
+- _Администратор — полный доступ (CRUD, управление пользователями)._
+
+### Дополнительно:
+
+- _Виджет текущей погоды._
+- _Реактивный поиск с debounce._
+
+### Стек технологий:
+
+| Категория         | Технологии                                                        |
+| ----------------- | ----------------------------------------------------------------- |
+| **Frontend**      | React, Vite, Styled Components                                    |
+| **Формы**         | React Hook Form, Yup                                              |
+| **Роутинг**       | React Router DOM                                                  |
+| **Состояние**     | Redux, Redux Thunk                                                |
+| **API / Backend** | JSON Server                                                       |
+| **Линтинг**       | ESLint, Prettier, EditorConfig                                    |
+| **Прочее**        | Lucide React (иконки), numeralize-ru (формат чисел), concurrently |
+
+### Установка и запуск:
+```sh
+$ npm install
+$ npm run dev
+```

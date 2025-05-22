@@ -1,5 +1,5 @@
 import { CircleUserRound, Trash2, Calendar } from 'lucide-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
   removeCommentAsync,
@@ -7,6 +7,7 @@ import {
   CLOSE_MODAL,
 } from '../../../../../../actions';
 import { useServerRequest } from '../../../../../../hooks';
+import { ROLE } from '../../../../../../constants';
 
 const CommentContainer = ({
   className,
@@ -18,6 +19,7 @@ const CommentContainer = ({
 }) => {
   const dispatch = useDispatch();
   const requestServer = useServerRequest();
+  const userRole = useSelector((state) => state.user.roleId);
 
   const onCommentRemove = (id) => {
     dispatch(
@@ -31,6 +33,8 @@ const CommentContainer = ({
       })
     );
   };
+
+  const isAdminOrModerator = [ROLE.ADMIN, ROLE.MODERATOR].includes(userRole);
 
   return (
     <div className={className}>
@@ -48,7 +52,7 @@ const CommentContainer = ({
         <div className="text-content">{content}</div>
       </div>
       <div className="trash">
-        <Trash2 onClick={() => onCommentRemove(id)} />
+        {isAdminOrModerator && <Trash2 onClick={() => onCommentRemove(id)} />}
       </div>
     </div>
   );

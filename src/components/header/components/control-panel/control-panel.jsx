@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROLE } from '../../../../constants';
 import { logout } from '../../../../actions';
+import { checkAccess } from '../../../../utils';
 
 const RightAligned = styled.div`
   display: flex;
@@ -16,6 +17,7 @@ const IconWrapper = styled.div`
   align-items: center;
   gap: 5px;
   margin-right: 15px;
+
   &:hover {
     cursor: pointer;
   }
@@ -42,6 +44,8 @@ const ControlPanelContainer = ({ className }) => {
     sessionStorage.removeItem('userData');
   };
 
+  const isAdmin = checkAccess([ROLE.ADMIN], roleId);
+
   return (
     <div className={className}>
       <RightAligned>
@@ -60,12 +64,16 @@ const ControlPanelContainer = ({ className }) => {
         <Icon margin="10px -5px 10px 10px">
           <IconWrapper>
             <ChevronsLeft size={40} onClick={() => navigate(-1)} />
-            <Link to="/post">
-              <FileText size={30} />
-            </Link>
-            <Link to="/users">
-              <Users size={30} />
-            </Link>
+            {isAdmin && (
+              <>
+                <Link to="/post">
+                  <FileText size={30} />
+                </Link>
+                <Link to="/users">
+                  <Users size={30} />
+                </Link>
+              </>
+            )}
           </IconWrapper>
         </Icon>
       </RightAligned>
