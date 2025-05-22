@@ -1,9 +1,11 @@
 import { Save, Trash2 } from 'lucide-react';
-import { Content, H2 } from '../../components';
+import { PrivateContent, H2 } from '../../components';
 import styled from 'styled-components';
 import { useServerRequest } from '../../hooks';
 import { useState, useEffect } from 'react';
 import { ROLE } from '../../constants';
+import { checkAccess } from '../../utils';
+import { useSelector } from 'react-redux';
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -97,7 +99,13 @@ const UsersContainer = ({ className }) => {
 
   const requestServer = useServerRequest();
 
+  const userRole = useSelector((state) => state.user.roleId);
+
   useEffect(() => {
+    if (!checkAccess([ROLE.ADMIN], userRole)) {
+      return;
+    }
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -126,7 +134,7 @@ const UsersContainer = ({ className }) => {
     };
 
     fetchData();
-  }, [requestServer, shouldUpdateUserList]);
+  }, [requestServer, shouldUpdateUserList, userRole]);
 
   const onRoleChange = (userId, newRoleId) => {
     setSelectedRoles((prev) => ({
@@ -154,13 +162,16 @@ const UsersContainer = ({ className }) => {
   };
 
   const onUserRemove = async (userId) => {
+    if (!checkAccess([ROLE.ADMIN], userRole)) {
+      return;
+    }
     await requestServer('removeUser', userId);
     setShouldUpdateUserList(!shouldUpdateUserList);
   };
 
   return (
     <div className={className}>
-      <Content error={errorMessage}>
+      <PrivateContent access={[ROLE.ADMIN]} serverError={errorMessage}>
         {isLoading ? (
           <Loader />
         ) : (
@@ -230,7 +241,7 @@ const UsersContainer = ({ className }) => {
             </Table>
           </>
         )}
-      </Content>
+      </PrivateContent>
     </div>
   );
 };

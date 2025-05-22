@@ -82,4 +82,8 @@ export const Comments = styled(CommentsContainer)`
       font-size: 16px;
     }
   }
+
+  .comments {
+    margin-bottom: 30px;
+  }
 `;

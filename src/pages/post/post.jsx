@@ -5,7 +5,8 @@ import { useMatch, useParams } from 'react-router-dom';
 import { loadPostAsync, RESET_POST_DATA } from '../../actions';
 import { useServerRequest } from '../../hooks';
 import styled from 'styled-components';
-import { Error } from '../../components';
+import { Error, PrivateContent } from '../../components';
+import { ROLE } from '../../constants';
 
 const PostContainer = ({ className }) => {
   const post = useSelector((state) => state.post);
@@ -14,7 +15,7 @@ const PostContainer = ({ className }) => {
   const requestServer = useServerRequest();
   const isEditing = useMatch('/post/:id/edit');
   const isCreating = useMatch('/post');
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useLayoutEffect(() => {
@@ -37,20 +38,21 @@ const PostContainer = ({ className }) => {
     return null;
   }
 
-  return error ? (
-    <Error error={error} />
-  ) : (
-    <div className={className}>
-      {isCreating || isEditing ? (
-        <PostForm {...post} />
-      ) : (
-        <>
-          <PostContent {...post} />
-          <Comments comments={post.comments} postId={post.id} />
-        </>
-      )}
-    </div>
-  );
+  const SpecificPostPage =
+    isCreating || isEditing ? (
+      <PrivateContent access={[ROLE.ADMIN]} serverError={error}>
+        <div className={className}>
+          <PostForm {...post} />
+        </div>
+      </PrivateContent>
+    ) : (
+      <div className={className}>
+        <PostContent {...post} />
+        <Comments comments={post.comments} postId={post.id} />
+      </div>
+    );
+
+  return error ? <Error error={error} /> : SpecificPostPage;
 };
 
 export const Post = styled(PostContainer)``;
