@@ -198,5 +198,17 @@
       "content": "gfdfgdgfd"
     }
   ],
-  "sessions": []
+  "sessions": [
+    {
+      "hash": "0.12555024989240903821041683841031044721603393554688",
+      "user": {
+        "id": "1",
+        "login": "vasya777",
+        "password": "qwerty12345",
+        "registeredAt": "2021-09-22",
+        "roleId": "0"
+      },
+      "id": 1
+    }
+  ]
 }

@@ -4,7 +4,11 @@ export const loadPostAsync = (requestServer, postId) => {
   return async (dispatch) => {
     try {
       const postData = await requestServer('fetchPost', postId);
-      dispatch(setPostData(postData.response));
+      if (postData.response) {
+        dispatch(setPostData(postData.response));
+      }
+
+      return postData;
     } catch (error) {
       console.error('Ошибка при загрузке поста:', error);
     }

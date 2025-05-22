@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import { Authorization, Main, Post, Registration, Users } from './pages';
-import { Header, Footer, Modal } from './components';
+import { Header, Footer, Modal, Error } from './components';
 import { useDispatch } from 'react-redux';
 import { useLayoutEffect } from 'react';
 import { setUser } from './actions';
+import { ERROR } from './constants';
 import styled from 'styled-components';
 
 const Content = styled.div`
@@ -47,7 +48,7 @@ function App() {
           <Route path="/post" element={<Post />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/post/:id/edit" element={<Post />} />
-          <Route path="*" element={<div>404</div>} />
+          <Route path="*" element={<Error error={ERROR.PAGE_NOT_EXIST} />} />
         </Routes>
       </Content>
       <Footer />
